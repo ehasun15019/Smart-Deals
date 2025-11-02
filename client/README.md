@@ -1,0 +1,1 @@
+1. tailwind, daisyui, router download 
