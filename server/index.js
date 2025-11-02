@@ -34,14 +34,21 @@ async function run() {
 
 
         /* products all API method start */
-        // get method
+        // get method for getting all data
         app.get('/products', async(req, res) => {
             const cursor = productCollection.find();
             const result = await cursor.toArray();
             res.send(result);
         });
 
-        // post method 
+        //get method for getting 6 data
+        app.get('/recent-products', async(req, res) => {
+            const cursor = productCollection.find().sort({ created_at: -1  }).limit(6);
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+
+        // post method for all data send in MongoDB
         app.post('/products', async(req, res) => {
             const newProducts = req.body;
             const result = await productCollection.insertOne(newProducts);
