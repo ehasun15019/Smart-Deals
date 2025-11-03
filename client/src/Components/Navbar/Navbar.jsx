@@ -1,18 +1,27 @@
-import React from "react";
+import React, { use } from "react";
 import { Link, NavLink } from "react-router";
+import './Navbar.css'
+import { AuthContext } from "../../Context/AuthContext";
 
 const Navbar = () => {
 
+  const {user} = use(AuthContext);
+
     const links = <>
-        <li><NavLink to="/">Home</NavLink></li>
-        <li><NavLink to="/">All Products</NavLink></li>
-        <li><NavLink to="/">My Products</NavLink></li>
-        <li><NavLink to="/">My Bids</NavLink></li>
-        <li><NavLink to="/">Create Product</NavLink></li>
+      <li><NavLink to="/">Home</NavLink></li>
+      <li><NavLink to="/cards/all-cards">All Products</NavLink></li>
+
+      {
+        user && <>
+          <li><NavLink to="/">My Products</NavLink></li>
+          <li><NavLink to="/">My Bids</NavLink></li>
+          <li><NavLink to="/products/create-products">Create Product</NavLink></li>
+        </>
+      }
     </>
 
   return (
-    <div className="navbar bg-base-100 px-10">
+    <div className="navbar bg-white px-10">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -51,7 +60,11 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="navbar-end">
-        <Link className="btn text-white px-9 rounded-full" style={{ background: "var(--color-primary)" }}>Login</Link>
+       {
+         user 
+         ?   <Link className="btn text-white px-9 rounded-full" style={{ background: "var(--color-primary)" }}>Log out</Link>
+         : <Link className="btn text-white px-9 rounded-full" style={{ background: "var(--color-primary)" }}>Login</Link>
+       }
       </div>
     </div>
   );

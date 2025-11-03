@@ -7,6 +7,7 @@
 @plugin "daisyui/theme" {
   name: "light";
   default: true;
+  --color-base-100: #F5F5F5;
   --color-primary: linear-gradient(90deg, #632EE3, #9F62F2);
   --color-banner: linear-gradient(90deg, #FFE6FD, #E0F8F5);
 }

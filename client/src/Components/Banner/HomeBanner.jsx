@@ -62,6 +62,7 @@ const HomeBanner = () => {
           <Link
             className="btn text-white sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl"
             style={{ background: "var(--color-primary)" }}
+            to="/cards/all-cards"
           >
             Watch All Products
           </Link>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CardDesign from "../Design/CardDesign";
 import { Link } from "react-router";
+import Title from "../Title";
 
 const RecentProducts = () => {
   const [recentProducts, setRecentProducts] = useState([]);
@@ -27,14 +28,19 @@ const RecentProducts = () => {
 
   return (
     <div className="py-9">
-      <h3 className="text-center text-[1.3rem] md:text-3xl lg:text-4xl font-semibold">
-        Recent <span className="text-[#9F62F2]">Products</span>
-      </h3>
+      <Title
+        title1={
+          <>
+            Recent <span className="text-[#9F62F2]">Products</span>
+          </>
+        }
+      />
 
       <div className="card-section grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center gap-3 mt-5">
         {recentProducts.map((item) => {
           return (
             <CardDesign
+              key={item._id}
               image={item.image}
               title={item.title}
               category={item.category}
@@ -48,6 +54,7 @@ const RecentProducts = () => {
         <Link
           style={{ background: "var(--color-primary)" }}
           className="px-12 py-4 text-white rounded-full"
+          to="/cards/all-cards"
         >
           Show all
         </Link>

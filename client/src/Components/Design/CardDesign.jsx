@@ -1,16 +1,16 @@
 import React from "react";
 import { Link } from "react-router";
 
-const CardDesign = ({ image, title, category, price_min }) => {
+const CardDesign = ({ _id ,image, title, category, price_min }) => {
   return (
-    <div className="card bg-base-100 w-70 md:w-80 lg:w-96 shadow-sm border border-gray-200">
+    <div className="card bg-white w-70 md:w-80 lg:w-96 shadow-sm">
       <figure className="px-10 pt-10">
-        {/* <img
+        <img
           src={image}
           alt={title}
           className="rounded-xl"
-        /> */}
-        <div className="py-20 bg-gray-200 w-full rounded-2xl"></div>
+        />
+        {/* <div className="py-20 bg-gray-200 w-full rounded-2xl"></div> */}
       </figure>
       <div className="card-body items-center text-center">
         <h2 className="card-title">{title}</h2>
@@ -25,7 +25,7 @@ const CardDesign = ({ image, title, category, price_min }) => {
         </p>
 
         <div className="card-actions">
-          <Link className="w-full btn border-2 border-[#9F62F2]">View Details</Link>
+          <Link to={`/details/card-details/${_id}`} className="w-full btn border-2 border-[#9F62F2]">View Details</Link>
         </div>
       </div>
     </div>
