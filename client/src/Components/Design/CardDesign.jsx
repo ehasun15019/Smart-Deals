@@ -4,11 +4,11 @@ import { Link } from "react-router";
 const CardDesign = ({ _id ,image, title, category, price_min }) => {
   return (
     <div className="card bg-white w-70 md:w-80 lg:w-96 shadow-sm">
-      <figure className="px-10 pt-10">
+      <figure className="pt-6">
         <img
           src={image}
           alt={title}
-          className="rounded-xl"
+          className="rounded-xl w-40"
         />
         {/* <div className="py-20 bg-gray-200 w-full rounded-2xl"></div> */}
       </figure>

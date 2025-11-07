@@ -30,6 +30,8 @@ async function run() {
     /* collection point start */
     const DataBase = client.db("Smart_DB");
     const productCollection = DataBase.collection("products");
+    const userCollection = DataBase.collection("users");
+    const wishListCollection = DataBase.collection("wishList");
     /* collection point end */
 
     /* products all API method start */
@@ -75,7 +77,7 @@ async function run() {
           !NewProduct.title ||
           !NewProduct.category ||
           !NewProduct.min_price ||
-          !NewProduct.seller_email 
+          !NewProduct.seller_email
         ) {
           return res.status(400).send({ message: "Missing required fields" });
         }
@@ -96,6 +98,64 @@ async function run() {
       }
     });
     /* products all API method end */
+
+    /* user all API method start */
+    //get method for all users
+    app.get("/users", async (req, res) => {
+      const cursor = userCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    // post method for user data send in MongoDB
+    app.post("/users", async (req, res) => {
+      const newUser = req.body;
+      const email = req.body.email;
+      const query = { email: email };
+
+      const existingUser = await userCollection.findOne(query);
+      if (existingUser) {
+        res.send({
+          message: "user already exists",
+        });
+      } else {
+        const result = await userCollection.insertOne(newUser);
+        res.send(result);
+      }
+    });
+    /* user all API method end */
+
+    /* wishlist all API method start */
+    //post method for wishlist data send in MongoDB
+    app.post("/whishList", async (req, res) => {
+      const product = req.body;
+
+      const existingItem = await wishListCollection.findOne({
+        product_id: product.product_id,
+      });
+
+      if (existingItem) {
+        return res.send({
+          success: false,
+          message: "Product already in wishList",
+        });
+      }
+
+      const result = await wishListCollection.insertOne(product);
+      res.send({
+        success: true,
+        message: "Product added to wishList",
+        data: result,
+      });
+    });
+
+    // get method for getting all wishlist data
+    app.get("/get-wishList", async (req, res) => {
+      const cursor = wishListCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+    /* wishlist all API method end */
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });

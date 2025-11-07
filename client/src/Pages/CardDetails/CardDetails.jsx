@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import CardDetailsDesign from "../../Components/Design/CardDetailsDesign";
+import useAxios from "../../Hooks/useAxios";
 
 const CardDetails = () => {
   const { id } = useParams();
   const [cardDetails, setCardDetails] = useState(null);
+  const axios = useAxios();
 
   useEffect(() => {
-    fetch(`http://localhost:3000/products/${id}`)
-      .then((res) => {
-        return res.json();
-      })
+    axios.get(`/products/${id}`)
       .then((data) => {
-        setCardDetails(data);
+        setCardDetails(data.data);
       });
-  }, [id]);
+  }, [axios, id]);
 
   if (!cardDetails) {
     return (
@@ -29,13 +28,13 @@ const CardDetails = () => {
       <CardDetailsDesign
         key={cardDetails._id}
         _id={cardDetails._id}
-        image={cardDetails.image}
+        image={cardDetails?.image ?? cardDetails?.product_image}
         description={cardDetails.description}
         condition={cardDetails.condition}
         usage={cardDetails.usage}
         title={cardDetails.title}
-        price_min={cardDetails.price_min}
-        price_max={cardDetails.price_max}
+        min_price={cardDetails.min_price}
+        max_price={cardDetails.max_price}
         created_at={cardDetails.created_at}
         seller_image={cardDetails.seller_image}
         seller_name={cardDetails.seller_name}

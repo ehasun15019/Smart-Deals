@@ -1,44 +1,147 @@
 import React, { use } from "react";
-import Title from "../Title";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
+import Title from "../Title";
+import { Link } from "react-router";
 import { AuthContext } from "../../Context/AuthContext";
+import toast from "react-hot-toast";
+import useAxios from "../../Hooks/useAxios";
 
 const Register = () => {
+  const axios = useAxios();
+  const { createUser, signInWithGoogle } = use(AuthContext);
 
-    const {signInWithGoogle} = use(AuthContext);
+  const handleRegister = (e) => {
+    e.preventDefault();
 
-    const handleGoogleSignIn = () => {
-        signInWithGoogle()
-        .then((res) => {
-            console.log(res.user);      
+    const target = e.target;
+    const name = target.name.value;
+    const email = target.email.value;
+    const password = target.password.value;
+    const photoUrl = target.photoUrl.value;
+
+    createUser(email, password, name)
+      .then((setUser) => {
+        const users = setUser.user;
+
+        const newUser = {
+          name: users.displayName || name,
+          email: users.email,
+          photoUrl: users.photoURL || photoUrl,
+        };
+
+        axios.post("/users", newUser)
+        .then((data) => {
+          if (data.data.insertedId) {
+            toast.success("User Registered Successfully");
+          } else if (data.message === "user already exists") {
+            toast.error("User already exists!");
+          }
+
+           target.reset();
         })
         .catch((error) => {
-            console.log(error);        
+          toast.error(error.message)
         })
-    }
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
+  };
+
+  const handleGoogleSignIn = () => {
+    signInWithGoogle()
+      .then((res) => {
+        // console.log(res.user);
+
+        const newUser = {
+          name: res.user.displayName,
+          email: res.user.email,
+          image: res.user.photoURL,
+        };
+
+        axios
+          .post("/users", newUser)
+          .then((userGetData) => {
+            if (userGetData.data.insertedId) {
+              toast.success("User SignUp Successfully with Google");
+            } else if (userGetData.data.message === "User already exists") {
+              toast.error("User already exists");
+            }
+          })
+
+          .catch((error) => {
+            toast.error(error.message);
+          });
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
+  };
 
   return (
     <div>
       <Navbar></Navbar>
 
-      <div className="py-8">
+      <div className="register py-8">
         <div className="card bg-base-100 w-full mx-auto max-w-sm shrink-0 shadow-2xl py-4">
           <Title title1={<>Register</>} />
           <div className="card-body">
-            <fieldset className="fieldset">
-              <label className="label">Email</label>
-              <input type="email" className="input" placeholder="Email" />
-              <label className="label">Password</label>
-              <input type="password" className="input" placeholder="Password" />
-              <div>
-                <a className="link link-hover">Forgot password?</a>
-              </div>
-              <button className="btn btn-neutral mt-4">Register</button>
-            </fieldset>
+            <form onSubmit={handleRegister}>
+              <fieldset className="fieldset">
+                {/* Email */}
+                <label className="label">Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  className="input"
+                  placeholder="Name"
+                  required
+                />
+
+                {/* Email */}
+                <label className="label">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  className="input"
+                  placeholder="Email"
+                  required
+                />
+
+                <label className="label">Photo url</label>
+                <input
+                  type="text"
+                  name="photoUrl"
+                  className="input"
+                  placeholder="Photo url"
+                  required
+                />
+
+                {/* password */}
+                <label className="label">Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  className="input"
+                  placeholder="Password"
+                  required
+                />
+
+                {/* forgot password */}
+                <div>
+                  <a className="link link-hover">Forgot password?</a>
+                </div>
+
+                <button className="btn btn-neutral mt-4">Register Now</button>
+              </fieldset>
+            </form>
 
             {/* Google */}
-            <button className="btn bg-white text-black border-[#e5e5e5]" onClick={handleGoogleSignIn}>
+            <button
+              className="btn bg-white text-black border-[#e5e5e5]"
+              onClick={handleGoogleSignIn}
+            >
               <svg
                 aria-label="Google logo"
                 width="16"
@@ -66,8 +169,17 @@ const Register = () => {
                   ></path>
                 </g>
               </svg>
-              Login with Google
+              Signup with Google
             </button>
+
+            <p className="text-center">
+              Already have an account?{" "}
+              <span>
+                <Link to="/login" className="text-blue-600">
+                  Login
+                </Link>
+              </span>
+            </p>
           </div>
         </div>
       </div>

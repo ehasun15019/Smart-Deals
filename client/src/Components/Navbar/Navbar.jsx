@@ -1,24 +1,45 @@
 import React, { use } from "react";
 import { Link, NavLink } from "react-router";
-import './Navbar.css'
+import "./Navbar.css";
 import { AuthContext } from "../../Context/AuthContext";
 
 const Navbar = () => {
+  const { user, singOutUser } = use(AuthContext);
 
-  const {user} = use(AuthContext);
+  const links = (
+    <>
+      <li>
+        <NavLink to="/">Home</NavLink>
+      </li>
+      <li>
+        <NavLink to="/cards/all-cards">All Products</NavLink>
+      </li>
 
-    const links = <>
-      <li><NavLink to="/">Home</NavLink></li>
-      <li><NavLink to="/cards/all-cards">All Products</NavLink></li>
-
-      {
-        user && <>
-          <li><NavLink to="/">My Products</NavLink></li>
-          <li><NavLink to="/">My Bids</NavLink></li>
-          <li><NavLink to="/products/create-products">Create Product</NavLink></li>
+      {user && (
+        <>
+          <li>
+            <NavLink to="/products/my-products">My Products</NavLink>
+          </li>
+          <li>
+            <NavLink to="/">My Bids</NavLink>
+          </li>
+          <li>
+            <NavLink to="/products/create-products">Create Product</NavLink>
+          </li>
         </>
-      }
+      )}
     </>
+  );
+
+  const handleSignOut = () => {
+    singOutUser()
+      .then(() => {
+        //sign out successful
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <div className="navbar bg-white px-10">
@@ -45,26 +66,34 @@ const Navbar = () => {
             tabIndex="-1"
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
           >
-           {
-            links
-           }
+            {links}
           </ul>
         </div>
-        <Link className="text-[1.3rem] md:text-3xl font-bold" to="/">Smart <span className="text-[#632EE3]">Deals</span></Link>
+        <Link className="text-[1.3rem] md:text-3xl font-bold" to="/">
+          Smart <span className="text-[#632EE3]">Deals</span>
+        </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
-           {
-            links
-           }
-        </ul>
+        <ul className="menu menu-horizontal px-1">{links}</ul>
       </div>
       <div className="navbar-end">
-       {
-         user 
-         ?   <Link className="btn text-white px-9 rounded-full" style={{ background: "var(--color-primary)" }}>Log out</Link>
-         : <Link className="btn text-white px-9 rounded-full" style={{ background: "var(--color-primary)" }}>Login</Link>
-       }
+        {user ? (
+          <Link
+            onClick={handleSignOut}
+            className="btn text-white px-9 rounded-full"
+            style={{ background: "var(--color-primary)" }}
+          >
+            Log out
+          </Link>
+        ) : (
+          <Link
+            to="/login"
+            className="btn text-white px-9 rounded-full"
+            style={{ background: "var(--color-primary)" }}
+          >
+            Login
+          </Link>
+        )}
       </div>
     </div>
   );

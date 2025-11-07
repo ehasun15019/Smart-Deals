@@ -7,7 +7,10 @@ import CardDetailsLayout from "../Layouts/CardDetailsLayout";
 import CardDetails from "../Pages/CardDetails/CardDetails";
 import CreateProductsLayout from "../Layouts/CreateProductsLayout";
 import CreateProducts from "../Pages/Create-Products/CreateProducts";
+import Login from "../Components/Login/Login";
 import Register from "../Components/Register/Register";
+import MyProductsLayout from "../Layouts/MyProductsLayout";
+import MyProducts from "../Pages/MyProducts/MyProducts";
 
 export const router = createBrowserRouter([
   {
@@ -16,9 +19,9 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        path: '/',
+        path: "/",
         element: <Home></Home>,
-      }
+      },
     ],
   },
   {
@@ -26,10 +29,10 @@ export const router = createBrowserRouter([
     element: <AllCardsLayout></AllCardsLayout>,
     children: [
       {
-        path: '/cards/all-cards',
-        element: <AllCards></AllCards>
-      }
-    ]
+        path: "/cards/all-cards",
+        element: <AllCards></AllCards>,
+      },
+    ],
   },
   {
     path: "details",
@@ -37,9 +40,9 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/details/card-details/:id",
-        element: <CardDetails></CardDetails>
-      }
-    ]
+        element: <CardDetails></CardDetails>,
+      },
+    ],
   },
   {
     path: "products",
@@ -47,12 +50,26 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/products/create-products",
-        element: <CreateProducts></CreateProducts>
-      }
-    ]
+        element: <CreateProducts></CreateProducts>,
+      },
+    ],
+  },
+  {
+    path: "login",
+    Component: Login,
   },
   {
     path: "register",
-    Component: Register
+    Component: Register,
+  },
+  {
+    path: "products",
+    element: <MyProductsLayout></MyProductsLayout>,
+    children: [
+      {
+        path: "/products/my-products",
+        element: <MyProducts></MyProducts>,
+      }
+    ]
   }
 ]);

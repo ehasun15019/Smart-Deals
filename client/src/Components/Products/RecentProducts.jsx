@@ -7,6 +7,7 @@ const RecentProducts = () => {
   const [recentProducts, setRecentProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
+
   useEffect(() => {
     fetch("http://localhost:3000/recent-products")
       .then((res) => {
@@ -14,6 +15,7 @@ const RecentProducts = () => {
       })
       .then((data) => {
         setRecentProducts(data);
+        console.log(data);
         setLoading(false);
       });
   }, []);
@@ -41,7 +43,7 @@ const RecentProducts = () => {
           return (
             <CardDesign
               key={item._id}
-              image={item.image}
+              image={item?.product_image ?? item?.image}
               title={item.title}
               category={item.category}
               price_min={item.price_min}

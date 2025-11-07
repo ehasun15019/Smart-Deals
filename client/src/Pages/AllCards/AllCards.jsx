@@ -43,7 +43,7 @@ const AllCards = () => {
             <CardDesign
               key={item._id}
               _id={item._id}
-              image={item.image}
+              image={item?.product_image ?? item?.image}
               title={item.title}
               category={item.category}
               price_min={item.price_min}
